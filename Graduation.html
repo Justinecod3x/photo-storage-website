@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Graduation Memories</title>
+
+    <link rel="stylesheet" href="Graduation.css">
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="graduation-header">
+        <div class="header-content">
+
+            <div class="header-icon">🎓</div>
+
+            <div>
+                <h1>Graduation Memories</h1>
+                <p>Celebrating achievements, memories, and new beginnings</p>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- BACK BUTTON -->
+        <button class="back-btn"
+                onclick="location.href='first_page.html'">
+            Back
+        </button>
+
+        <!-- PAGE TITLE -->
+        <section class="page-title">
+            <span>🎓</span>
+
+            <div>
+                <h2>Our Graduation Album</h2>
+                <p>
+                    Keep and preserve the special moments
+                    of your graduation day.
+                </p>
+            </div>
+        </section>
+
+        <!-- UPLOAD SECTION -->
+        <section class="upload-box">
+
+            <div class="upload-icon">📸</div>
+
+            <h2>Add Graduation Photos</h2>
+
+            <p>
+                Upload your favorite graduation photos
+                and keep your achievements and memories
+                in one special place.
+            </p>
+
+            <label for="photoInput" class="upload-btn">
+                🎓 Add Graduation Photos
+            </label>
+
+            <input
+                type="file"
+                id="photoInput"
+                accept="image/*"
+                multiple>
+
+        </section>
+
+        <!-- GALLERY HEADER -->
+        <section class="gallery-header">
+
+            <div>
+                <h2>🎓 Graduation Gallery</h2>
+                <p>
+                    Your achievements, celebrations,
+                    and unforgettable moments
+                </p>
+            </div>
+
+            <div class="photo-count" id="photoCount">
+                0 Photos
+            </div>
+
+        </section>
+
+        <!-- PHOTO GALLERY -->
+        <section class="gallery" id="gallery"></section>
+
+        <!-- GRADUATION QR CODE GENERATOR -->
+        <section class="qr-box">
+
+            <div class="qr-icon">🎓</div>
+
+            <h2>Graduation Gallery QR Code</h2>
+
+            <p>
+                Share your graduation memories with family and friends.
+                Generate a QR code to open the graduation guest form.
+            </p>
+
+            <button
+                type="button"
+                class="qr-btn"
+                id="generateQR">
+
+                🎓 Generate Graduation QR Code
+
+            </button>
+
+            <div class="qr-result" id="qrResult" hidden>
+
+                <div id="qrcode"></div>
+
+                <p>
+                    Scan this QR code to open your Graduation Guest Form.
+                </p>
+
+                <button
+                    type="button"
+                    class="qr-btn"
+                    id="downloadQR">
+
+                    ⬇ Download QR Code
+
+                </button>
+
+            </div>
+
+            <p id="qrMessage" class="qr-message"></p>
+
+        </section>
+
+    </main>
+
+    <script>
+
+        /* =====================================
+           GET HTML ELEMENTS
+        ===================================== */
+
+        const photoInput = document.getElementById("photoInput");
+        const gallery = document.getElementById("gallery");
+        const photoCount = document.getElementById("photoCount");
+
+        const generateQRBtn = document.getElementById("generateQR");
+        const qrResult = document.getElementById("qrResult");
+        const qrContainer = document.getElementById("qrcode");
+        const downloadQRBtn = document.getElementById("downloadQR");
+        const qrMessage = document.getElementById("qrMessage");
+
+
+        /* =====================================
+           LOAD SAVED GRADUATION PHOTOS
+        ===================================== */
+
+        let photos = [];
+
+        try {
+            photos = JSON.parse(
+                localStorage.getItem("graduationPhotos")
+            ) || [];
+
+            if (!Array.isArray(photos)) {
+                photos = [];
+            }
+
+        } catch (error) {
+            photos = [];
+            console.error("Unable to load graduation photos:", error);
+        }
+
+
+        /* =====================================
+           DISPLAY PHOTOS
+        ===================================== */
+
+        function displayPhotos() {
+
+            gallery.innerHTML = "";
+
+            updatePhotoCount();
+
+            if (photos.length === 0) {
+
+                gallery.innerHTML = `
+                    <div class="no-photo">
+                        <div class="empty-icon">🎓</div>
+                        <h3>No Graduation Memories Yet</h3>
+                        <p>
+                            Upload your first graduation
+                            photo to start your album.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            photos.forEach(function(photo, index) {
+
+                const card = document.createElement("div");
+                card.className = "photo-card";
+
+                const imageContainer = document.createElement("div");
+                imageContainer.className = "image-container";
+
+                const img = document.createElement("img");
+                img.src = photo;
+                img.alt = "Graduation Photo " + (index + 1);
+
+                imageContainer.appendChild(img);
+
+                // DOWNLOAD PHOTO BUTTON
+                const downloadLink = document.createElement("a");
+                downloadLink.className = "download-btn";
+                downloadLink.href = photo;
+                downloadLink.download =
+                    "graduation-photo-" + (index + 1) + ".png";
+                downloadLink.textContent = "⬇ Save Photo";
+
+                // DELETE PHOTO BUTTON
+                const deleteButton = document.createElement("button");
+                deleteButton.className = "delete-btn";
+                deleteButton.type = "button";
+                deleteButton.textContent = "🗑 Delete";
+
+                deleteButton.addEventListener("click", function() {
+                    deletePhoto(index);
+                });
+
+                card.appendChild(imageContainer);
+                card.appendChild(downloadLink);
+                card.appendChild(deleteButton);
+
+                gallery.appendChild(card);
+
+            });
+
+        }
+
+
+        /* =====================================
+           UPLOAD GRADUATION PHOTOS
+        ===================================== */
+
+        photoInput.addEventListener("change", function(event) {
+
+            const files = Array.from(event.target.files);
+
+            files.forEach(function(file) {
+
+                if (!file.type.startsWith("image/")) {
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+
+                    const imageData = e.target.result;
+
+                    try {
+
+                        const updatedPhotos = [...photos, imageData];
+
+                        localStorage.setItem(
+                            "graduationPhotos",
+                            JSON.stringify(updatedPhotos)
+                        );
+
+                        photos = updatedPhotos;
+                        displayPhotos();
+
+                    } catch (error) {
+
+                        alert(
+                            "Unable to save this photo. Browser storage may be full. Try using smaller photos."
+                        );
+
+                        console.error("Graduation photo storage error:", error);
+                    }
+
+                };
+
+                reader.onerror = function() {
+                    alert("Unable to read this image. Please try again.");
+                };
+
+                reader.readAsDataURL(file);
+
+            });
+
+            photoInput.value = "";
+
+        });
+
+
+        /* =====================================
+           DELETE GRADUATION PHOTO
+        ===================================== */
+
+        function deletePhoto(index) {
+
+            const confirmDelete = confirm(
+                "Are you sure you want to delete this graduation photo?"
+            );
+
+            if (!confirmDelete) {
+                return;
+            }
+
+            const updatedPhotos = [...photos];
+            updatedPhotos.splice(index, 1);
+
+            try {
+
+                localStorage.setItem(
+                    "graduationPhotos",
+                    JSON.stringify(updatedPhotos)
+                );
+
+                photos = updatedPhotos;
+                displayPhotos();
+
+            } catch (error) {
+
+                alert("Unable to update your graduation gallery.");
+                console.error(error);
+
+            }
+
+        }
+
+
+        /* =====================================
+           PHOTO COUNTER
+        ===================================== */
+
+        function updatePhotoCount() {
+
+            photoCount.textContent =
+                photos.length +
+                (photos.length === 1 ? " Photo" : " Photos");
+
+        }
+
+
+        /* =====================================
+           GENERATE GRADUATION QR CODE
+        ===================================== */
+
+        generateQRBtn.addEventListener("click", function() {
+
+            if (typeof QRCode === "undefined") {
+
+                qrMessage.textContent =
+                    "QR code library failed to load. Check your internet connection and refresh the page.";
+
+                return;
+            }
+
+            // QR code opens the graduation guest form.
+            const graduationURL = new URL(
+                "graduation_form.html",
+                window.location.href
+            ).href;
+
+            // Clear previous QR code.
+            qrContainer.innerHTML = "";
+            qrMessage.textContent = "";
+
+            // Show QR code area.
+            qrResult.hidden = false;
+
+            // Generate QR code.
+            new QRCode(qrContainer, {
+                text: graduationURL,
+                width: 220,
+                height: 220,
+                colorDark: "#253b80",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+        });
+
+
+        /* =====================================
+           DOWNLOAD GRADUATION QR CODE
+        ===================================== */
+
+        downloadQRBtn.addEventListener("click", function() {
+
+            const canvas = qrContainer.querySelector("canvas");
+            const image = qrContainer.querySelector("img");
+
+            let imageURL = "";
+
+            if (canvas) {
+                imageURL = canvas.toDataURL("image/png");
+            } else if (image) {
+                imageURL = image.src;
+            }
+
+            if (!imageURL) {
+
+                qrMessage.textContent =
+                    "Please generate your graduation QR code first.";
+
+                return;
+            }
+
+            const link = document.createElement("a");
+
+            link.href = imageURL;
+            link.download = "Graduation_Memories_QR.png";
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+        });
+
+
+        /* =====================================
+           INITIALIZE GALLERY
+        ===================================== */
+
+        displayPhotos();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Guest Scanner | Photo Storage</title>
+
+    <link rel="stylesheet" href="scanner.css">
+
+    <!-- QR scanner library -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+    <div class="scanner-container">
+
+        <a href="index.html" class="back-link">← Back to Login</a>
+
+        <div class="scanner-icon">📷</div>
+
+        <h1>Guest Scanner</h1>
+
+        <p class="subtitle">
+            Scan a QR code to view its contents
+        </p>
+
+        <div id="reader"></div>
+
+        <div id="scan-result" class="scan-result">
+            <strong>Scan Result</strong>
+            <p>Your scanned result will appear here.</p>
+        </div>
+
+        <button id="reset-btn" type="button">
+            Scan Again
+        </button>
+
+        <p class="note">
+            Allow camera access when prompted.
+        </p>
+
+    </div>
+
+    <script>
+        const resultBox = document.getElementById("scan-result");
+        const resetButton = document.getElementById("reset-btn");
+
+        let scanner;
+
+        function onScanSuccess(decodedText) {
+            resultBox.innerHTML = "";
+
+            const heading = document.createElement("strong");
+            heading.textContent = "QR Code Scanned Successfully!";
+
+            const result = document.createElement("p");
+            result.textContent = decodedText;
+
+            resultBox.appendChild(heading);
+            resultBox.appendChild(result);
+
+            resultBox.classList.add("success");
+        }
+
+        function onScanFailure(error) {
+            // Ignore unsuccessful frames while scanning.
+        }
+
+        if (typeof Html5QrcodeScanner !== "undefined") {
+            scanner = new Html5QrcodeScanner(
+                "reader",
+                {
+                    fps: 10,
+                    qrbox: {
+                        width: 230,
+                        height: 230
+                    },
+                    rememberLastUsedCamera: true
+                },
+                false
+            );
+
+            scanner.render(onScanSuccess, onScanFailure);
+        } else {
+            resultBox.textContent =
+                "Scanner library could not load. Check your internet connection.";
+        }
+
+        resetButton.addEventListener("click", function() {
+            resultBox.innerHTML = "";
+
+            const heading = document.createElement("strong");
+            heading.textContent = "Scan Result";
+
+            const message = document.createElement("p");
+            message.textContent = "Ready to scan another QR code.";
+
+            resultBox.appendChild(heading);
+            resultBox.appendChild(message);
+            resultBox.classList.remove("success");
+        });
+    </script>
+
+</body>
+</html>

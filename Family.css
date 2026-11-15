@@ -1,0 +1,594 @@
+
+/* =========================================
+   FAMILY MEMORIES - ELEGANT ROSE THEME
+========================================= */
+
+:root {
+    --primary: #9b5367;
+    --primary-dark: #713749;
+    --primary-light: #f5e4e8;
+    --rose: #c98291;
+    --cream: #fbf7f3;
+    --white: #ffffff;
+    --dark: #382b30;
+    --text: #66565c;
+    --muted: #988a8e;
+    --border: #eadde0;
+    --danger: #c94f55;
+    --shadow: 0 8px 28px rgba(91, 48, 62, 0.08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.family-header {
+    background: linear-gradient(120deg, #713749, #a85e73, #c98291);
+    color: var(--white);
+    padding: 32px 7%;
+    box-shadow: 0 5px 20px rgba(91, 48, 62, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.family-header::after {
+    content: "♡";
+    position: absolute;
+    right: 9%;
+    top: -45px;
+    font-size: 190px;
+    color: rgba(255, 255, 255, 0.07);
+    pointer-events: none;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 1250px;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.header-icon {
+    width: 72px;
+    height: 72px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    backdrop-filter: blur(5px);
+}
+
+.family-header h1 {
+    font-size: 30px;
+    font-weight: 750;
+    letter-spacing: 0.3px;
+    margin-bottom: 7px;
+}
+
+.family-header p {
+    color: #f8e9ed;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.container {
+    max-width: 1250px;
+    width: 90%;
+    margin: 38px auto;
+}
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--primary-dark);
+    padding: 12px 21px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(91, 48, 62, 0.05);
+    transition: 0.3s ease;
+}
+
+.back-btn:hover {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+    transform: translateX(-4px);
+}
+
+/* =========================================
+   PAGE TITLE
+========================================= */
+
+.page-title {
+    text-align: center;
+    margin: 55px auto 42px;
+    max-width: 720px;
+}
+
+.title-decoration {
+    color: var(--rose);
+    font-size: 35px;
+    margin-bottom: 12px;
+}
+
+.page-title h2 {
+    font-family: Georgia, serif;
+    font-size: 39px;
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.page-title p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   UPLOAD SECTION
+========================================= */
+
+.upload-box {
+    background: var(--white);
+    border: 2px dashed #d9aab6;
+    border-radius: 22px;
+    padding: 48px 25px;
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto 55px;
+    transition: 0.3s ease;
+    box-shadow: var(--shadow);
+}
+
+.upload-box:hover {
+    border-color: var(--primary);
+    background: #fffafb;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(155, 83, 103, 0.12);
+}
+
+.upload-icon {
+    width: 82px;
+    height: 82px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 37px;
+    margin: 0 auto 20px;
+}
+
+.upload-box h3 {
+    font-size: 23px;
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+}
+
+.upload-box p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.upload-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--rose));
+    color: var(--white);
+    padding: 15px 28px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 5px 14px rgba(155, 83, 103, 0.2);
+}
+
+.upload-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(155, 83, 103, 0.25);
+}
+
+/* =========================================
+   GALLERY HEADER
+========================================= */
+
+.gallery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 27px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid var(--border);
+}
+
+.gallery-header h2 {
+    color: var(--primary-dark);
+    font-family: Georgia, serif;
+    font-size: 26px;
+    margin-bottom: 7px;
+}
+
+.gallery-header p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.photo-count {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 11px 19px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 750;
+    white-space: nowrap;
+    border: 1px solid #efd3da;
+}
+
+/* =========================================
+   PHOTO GALLERY
+========================================= */
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+    margin-bottom: 65px;
+}
+
+.photo-card {
+    background: var(--white);
+    border-radius: 17px;
+    padding: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: 0.35s ease;
+    border: 1px solid var(--border);
+}
+
+.photo-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 15px 35px rgba(91, 48, 62, 0.14);
+    border-color: #d9aab6;
+}
+
+.image-container {
+    width: 100%;
+    height: 245px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--primary-light);
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.photo-card:hover .image-container img {
+    transform: scale(1.06);
+}
+
+/* =========================================
+   PHOTO ACTION BUTTONS
+========================================= */
+
+.download-btn,
+.delete-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.download-btn {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border: 1px solid transparent;
+}
+
+.download-btn:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.delete-btn {
+    background: #fff0ef;
+    color: var(--danger);
+    border: 1px solid transparent;
+}
+
+.delete-btn:hover {
+    background: var(--danger);
+    color: var(--white);
+}
+
+/* =========================================
+   EMPTY GALLERY
+========================================= */
+
+.no-photo {
+    grid-column: 1 / -1;
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 65px 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.empty-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.no-photo h3 {
+    color: var(--primary-dark);
+    font-family: Georgia, serif;
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.no-photo p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* =========================================
+   QR CODE SECTION
+========================================= */
+
+.qr-box {
+    background: linear-gradient(145deg, #ffffff, #fff8fa);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 48px 25px;
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto 60px;
+    box-shadow: var(--shadow);
+}
+
+.qr-icon {
+    width: 78px;
+    height: 78px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 23px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    margin: 0 auto 20px;
+}
+
+.qr-box h2 {
+    font-family: Georgia, serif;
+    color: var(--primary-dark);
+    font-size: 27px;
+    margin-bottom: 13px;
+}
+
+.qr-box > p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 550px;
+    margin: 0 auto 25px;
+}
+
+/* QR BUTTON */
+
+.qr-btn {
+    background: linear-gradient(135deg, var(--primary), var(--rose));
+    color: var(--white);
+    border: none;
+    padding: 14px 25px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 5px 14px rgba(155, 83, 103, 0.2);
+}
+
+.qr-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+}
+
+/* QR RESULT */
+
+.qr-result {
+    margin: 30px auto 0;
+    padding: 28px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    max-width: 370px;
+    box-shadow: 0 5px 18px rgba(91, 48, 62, 0.06);
+}
+
+#qrcode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 17px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    margin: 0 auto 20px;
+}
+
+#qrcode img,
+#qrcode canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.qr-result p {
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.qr-message {
+    color: var(--danger);
+    font-size: 13px;
+    margin-top: 16px;
+}
+
+/* =========================================
+   BUTTON FOCUS AND ACCESSIBILITY
+========================================= */
+
+button:focus-visible,
+a:focus-visible,
+.upload-btn:focus-visible {
+    outline: 3px solid #d9aab6;
+    outline-offset: 3px;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 900px) {
+    .gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .image-container {
+        height: 220px;
+    }
+}
+
+@media (max-width: 600px) {
+    .family-header {
+        padding: 23px 5%;
+    }
+
+    .header-content {
+        gap: 14px;
+    }
+
+    .header-icon {
+        width: 57px;
+        height: 57px;
+        font-size: 28px;
+        border-radius: 16px;
+    }
+
+    .family-header h1 {
+        font-size: 22px;
+    }
+
+    .family-header p {
+        font-size: 12px;
+    }
+
+    .container {
+        width: 92%;
+        margin-top: 24px;
+    }
+
+    .page-title {
+        margin: 40px auto 30px;
+    }
+
+    .page-title h2 {
+        font-size: 29px;
+    }
+
+    .page-title p {
+        font-size: 13px;
+    }
+
+    .upload-box {
+        padding: 35px 18px;
+    }
+
+    .upload-box h3 {
+        font-size: 20px;
+    }
+
+    .gallery {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .image-container {
+        height: 250px;
+    }
+
+    .gallery-header {
+        align-items: flex-start;
+    }
+
+    .gallery-header h2 {
+        font-size: 21px;
+    }
+
+    .photo-count {
+        font-size: 11px;
+        padding: 9px 12px;
+    }
+
+    .qr-box {
+        padding: 35px 18px;
+    }
+
+    .qr-box h2 {
+        font-size: 23px;
+    }
+}

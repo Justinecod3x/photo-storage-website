@@ -1,0 +1,28 @@
+<form id="birthdayForm">
+    <label for="guestName">Your Name</label>
+    <input
+        type="text"
+        id="guestName"
+        required
+        placeholder="Enter your name"
+    >
+
+    <button type="submit">Continue to Gallery</button>
+</form>
+
+<script>
+document.getElementById("birthdayForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const guestName = document.getElementById("guestName").value.trim();
+
+    if (!guestName) {
+        alert("Please enter your name.");
+        return;
+    }
+
+    sessionStorage.setItem("birthdayGuestName", guestName);
+
+    window.location.href = "birthday_guest_gallery.html";
+});
+</script>

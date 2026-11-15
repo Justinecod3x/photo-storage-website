@@ -1,0 +1,135 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wedding QR Code</title>
+
+    <link rel="stylesheet" href="scanner.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+    <div class="scanner-container">
+
+        <a href="first_page.html" class="back-link">
+            ← Back to Photo Storage
+        </a>
+
+        <div class="scanner-icon">💍</div>
+
+        <h1>Wedding Gallery QR</h1>
+
+        <p class="subtitle">
+            Scan this code to open the wedding gallery.
+        </p>
+
+        <!-- QR Code -->
+        <div id="qrcode"
+             style="display:flex; justify-content:center; margin:25px 0;">
+        </div>
+
+        <!-- Status message -->
+        <p id="statusMessage">Generating QR code...</p>
+
+        <!-- Download button -->
+        <button id="downloadQR" type="button" disabled>
+            Download QR Code
+        </button>
+
+        <!-- Continue button -->
+        <button id="continueBtn" type="button" disabled>
+            Continue to Wedding Gallery
+        </button>
+
+        <p class="note">
+            Scan the QR code to open your wedding gallery.
+        </p>
+
+    </div>
+
+    <script>
+        // Wedding gallery destination
+        const weddingURL = new URL(
+            "wedding.html",
+            window.location.href
+        ).href;
+
+        const qrContainer = document.getElementById("qrcode");
+        const downloadBtn = document.getElementById("downloadQR");
+        const continueBtn = document.getElementById("continueBtn");
+        const statusMessage = document.getElementById("statusMessage");
+
+        // Generate QR code
+        try {
+            new QRCode(qrContainer, {
+                text: weddingURL,
+                width: 220,
+                height: 220,
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // Wait for the QR code image to finish rendering
+            const checkQR = setInterval(function () {
+                const canvas = qrContainer.querySelector("canvas");
+                const image = qrContainer.querySelector("img");
+
+                if (canvas || (image && image.complete && image.naturalWidth > 0)) {
+                    clearInterval(checkQR);
+
+                    statusMessage.textContent =
+                        "QR code generated successfully!";
+
+                    downloadBtn.disabled = false;
+                    continueBtn.disabled = false;
+                }
+            }, 100);
+
+            // Stop checking if QR generation fails or takes too long
+            setTimeout(function () {
+                clearInterval(checkQR);
+
+                if (downloadBtn.disabled) {
+                    statusMessage.textContent =
+                        "Unable to generate QR code. Please refresh the page.";
+                }
+            }, 5000);
+
+        } catch (error) {
+            statusMessage.textContent =
+                "An error occurred while generating the QR code.";
+        }
+
+        // Download QR code
+        downloadBtn.addEventListener("click", function () {
+            const canvas = qrContainer.querySelector("canvas");
+            const image = qrContainer.querySelector("img");
+
+            const imageURL = canvas
+                ? canvas.toDataURL("image/png")
+                : image?.src;
+
+            if (!imageURL) {
+                alert("QR code is not ready yet.");
+                return;
+            }
+
+            const link = document.createElement("a");
+            link.href = imageURL;
+            link.download = "wedding-gallery-qr.png";
+            link.click();
+        });
+
+        // Proceed to the wedding gallery
+        continueBtn.addEventListener("click", function () {
+            window.location.href = weddingURL;
+        });
+    </script>
+
+</body>
+</html>
+```

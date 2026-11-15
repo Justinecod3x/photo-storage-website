@@ -1,0 +1,213 @@
+/* ==============================
+   PHOTO STORAGE LOGIN PAGE
+   ============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    background: linear-gradient(
+        135deg,
+        #f8c8dc,
+        #d8c5f2,
+        #c6dcf5
+    );
+}
+
+/* LOGIN CONTAINER */
+
+.login-container {
+    width: 100%;
+    max-width: 430px;
+    padding: 45px 35px 30px;
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 25px;
+
+    box-shadow: 0 15px 45px rgba(80, 50, 100, 0.15);
+
+    animation: fadeIn 0.8s ease;
+}
+
+/* LOGO */
+
+.logo {
+    width: 85px;
+    height: 85px;
+    margin: 0 auto 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 42px;
+    background: linear-gradient(135deg, #e9b5d0, #c7b2ed);
+    border-radius: 50%;
+
+    box-shadow: 0 8px 20px rgba(160, 110, 180, 0.2);
+}
+
+/* TITLE */
+
+h1 {
+    color: #493452;
+    font-size: 30px;
+    font-weight: 750;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #88758e;
+    font-size: 14px;
+    margin-bottom: 35px;
+}
+
+/* LOGIN OPTIONS */
+
+.login-options {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* LOGIN BUTTON */
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    width: 100%;
+    padding: 18px;
+
+    text-decoration: none;
+    text-align: left;
+
+    border-radius: 16px;
+    border: 1px solid #eee4f2;
+
+    background: #ffffff;
+    color: #493452;
+
+    transition: all 0.3s ease;
+}
+
+/* BUTTON ICON */
+
+.login-btn .icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 23px;
+    border-radius: 13px;
+}
+
+/* BUTTON TEXT */
+
+.login-btn strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.login-btn small {
+    display: block;
+    color: #95889a;
+    font-size: 12px;
+}
+
+/* ARROW */
+
+.login-btn .arrow {
+    margin-left: auto;
+    font-size: 25px;
+    color: #a58bb5;
+    transition: transform 0.3s ease;
+}
+
+/* ADMIN BUTTON */
+
+.admin-btn .icon {
+    background: #f1e4fb;
+}
+
+.admin-btn:hover {
+    border-color: #b58bd8;
+    background: #fcf8ff;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(150, 110, 190, 0.15);
+}
+
+/* GUEST BUTTON */
+
+.guest-btn .icon {
+    background: #e1f0ff;
+}
+
+.guest-btn:hover {
+    border-color: #8dbce9;
+    background: #f7fbff;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(100, 150, 210, 0.15);
+}
+
+/* HOVER ARROW */
+
+.login-btn:hover .arrow {
+    transform: translateX(5px);
+}
+
+/* FOOTER */
+
+.footer-text {
+    margin-top: 35px;
+    color: #a092a5;
+    font-size: 12px;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 35px 22px 25px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .login-btn {
+        padding: 15px;
+    }
+}

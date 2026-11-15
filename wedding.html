@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Wedding Memories</title>
+
+    <link rel="stylesheet" href="wedding.css">
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script type="module" src="test-supabase.js"></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="wedding-header">
+        <div class="header-content">
+
+            <div class="header-icon">💍</div>
+
+            <div>
+                <h1>Wedding Memories</h1>
+                <p>Keep your special moments safe and organized</p>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- BACK BUTTON -->
+        <button class="back-btn"
+                onclick="location.href='first_page.html'">
+            Back
+        </button>
+
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <span>💍</span>
+
+            <div>
+                <h2>Wedding Photos</h2>
+                <p>Your collection of beautiful wedding memories</p>
+            </div>
+        </div>
+
+        <!-- UPLOAD AREA -->
+        <section class="upload-box">
+
+            <div class="upload-icon">📷</div>
+
+            <h2>Add Wedding Photos</h2>
+
+            <p>
+                Select one or more photos from your computer
+                to add them to your wedding gallery.
+            </p>
+
+            <label for="photoInput" class="upload-btn">
+                📷 Choose Photos
+            </label>
+
+            <input
+                type="file"
+                id="photoInput"
+                accept="image/*"
+                multiple>
+
+        </section>
+
+        <!-- GALLERY HEADER -->
+        <div class="gallery-header">
+
+            <div>
+                <h2>📸 Wedding Gallery</h2>
+                <p>Your uploaded wedding memories</p>
+            </div>
+
+            <div class="photo-count" id="photoCount">
+                0 Photos
+            </div>
+
+        </div>
+
+        <!-- PHOTO GALLERY -->
+        <div class="gallery" id="gallery"></div>
+
+        <!-- WEDDING QR CODE GENERATOR -->
+        <section class="qr-box">
+
+            <div class="qr-icon">💍</div>
+
+            <h2>Wedding Gallery QR Code</h2>
+
+            <p>
+                Share your wedding memories with family and friends.
+                Generate a QR code to open this wedding page.
+            </p>
+
+            <button
+                type="button"
+                class="qr-btn"
+                id="generateQR">
+
+                💍 Generate Wedding QR Code
+
+            </button>
+
+            <div class="qr-result" id="qrResult" hidden>
+
+                <div id="qrcode"></div>
+
+                <p>Scan this QR code to open your Wedding Gallery.</p>
+
+                <button
+                    type="button"
+                    class="qr-btn"
+                    id="downloadQR">
+
+                    ⬇ Download QR Code
+
+                </button>
+
+            </div>
+
+            <p id="qrMessage" class="qr-message"></p>
+
+        </section>
+
+    </main>
+
+    <script>
+
+        /* =====================================
+           GET HTML ELEMENTS
+        ===================================== */
+
+        const photoInput = document.getElementById("photoInput");
+        const gallery = document.getElementById("gallery");
+        const photoCount = document.getElementById("photoCount");
+
+        const generateQRBtn = document.getElementById("generateQR");
+        const qrResult = document.getElementById("qrResult");
+        const qrContainer = document.getElementById("qrcode");
+        const downloadQRBtn = document.getElementById("downloadQR");
+        const qrMessage = document.getElementById("qrMessage");
+
+
+        /* =====================================
+           LOAD SAVED WEDDING PHOTOS
+        ===================================== */
+
+        let photos = [];
+
+        try {
+            photos = JSON.parse(
+                localStorage.getItem("weddingPhotos")
+            ) || [];
+
+            if (!Array.isArray(photos)) {
+                photos = [];
+            }
+
+        } catch (error) {
+            photos = [];
+            console.error("Unable to load wedding photos:", error);
+        }
+
+
+        /* =====================================
+           DISPLAY PHOTOS
+        ===================================== */
+
+        function displayPhotos() {
+
+            gallery.innerHTML = "";
+
+            photoCount.textContent =
+                photos.length +
+                (photos.length === 1 ? " Photo" : " Photos");
+
+            if (photos.length === 0) {
+
+                gallery.innerHTML = `
+                    <div class="no-photo">
+                        <div class="empty-icon">💍</div>
+                        <h3>No Wedding Photos Yet</h3>
+                        <p>
+                            Click "Choose Photos" above
+                            to add your wedding memories.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            photos.forEach(function(photo, index) {
+
+                const photoCard = document.createElement("div");
+                photoCard.className = "photo-card";
+
+                const imageContainer = document.createElement("div");
+                imageContainer.className = "image-container";
+
+                const img = document.createElement("img");
+                img.src = photo;
+                img.alt = "Wedding Photo " + (index + 1);
+
+                imageContainer.appendChild(img);
+
+                // SAVE PHOTO BUTTON
+                const downloadLink = document.createElement("a");
+                downloadLink.className = "download-btn";
+                downloadLink.href = photo;
+                downloadLink.download =
+                    "wedding-photo-" + (index + 1) + ".png";
+                downloadLink.textContent = "⬇ Save Photo";
+
+                // DELETE PHOTO BUTTON
+                const deleteButton = document.createElement("button");
+                deleteButton.className = "delete-btn";
+                deleteButton.type = "button";
+                deleteButton.textContent = "🗑 Delete";
+
+                deleteButton.addEventListener("click", function() {
+                    deletePhoto(index);
+                });
+
+                photoCard.appendChild(imageContainer);
+                photoCard.appendChild(downloadLink);
+                photoCard.appendChild(deleteButton);
+
+                gallery.appendChild(photoCard);
+
+            });
+
+        }
+
+
+        /* =====================================
+           UPLOAD WEDDING PHOTOS
+        ===================================== */
+
+        photoInput.addEventListener("change", function(event) {
+
+            const files = Array.from(event.target.files);
+
+            files.forEach(function(file) {
+
+                if (!file.type.startsWith("image/")) {
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+
+                    const updatedPhotos = [...photos, e.target.result];
+
+                    try {
+
+                        localStorage.setItem(
+                            "weddingPhotos",
+                            JSON.stringify(updatedPhotos)
+                        );
+
+                        photos = updatedPhotos;
+                        displayPhotos();
+
+                    } catch (error) {
+
+                        alert(
+                            "Unable to save this photo. Browser storage may be full. Try using smaller photos."
+                        );
+
+                        console.error("Wedding photo storage error:", error);
+                    }
+
+                };
+
+                reader.onerror = function() {
+                    alert("Unable to read this image. Please try again.");
+                };
+
+                reader.readAsDataURL(file);
+
+            });
+
+            photoInput.value = "";
+
+        });
+
+
+        /* =====================================
+           DELETE WEDDING PHOTO
+        ===================================== */
+
+        function deletePhoto(index) {
+
+            const confirmDelete = confirm(
+                "Are you sure you want to delete this wedding photo?"
+            );
+
+            if (!confirmDelete) {
+                return;
+            }
+
+            const updatedPhotos = [...photos];
+            updatedPhotos.splice(index, 1);
+
+            try {
+
+                localStorage.setItem(
+                    "weddingPhotos",
+                    JSON.stringify(updatedPhotos)
+                );
+
+                photos = updatedPhotos;
+                displayPhotos();
+
+            } catch (error) {
+
+                alert("Unable to update your wedding gallery.");
+                console.error(error);
+
+            }
+
+        }
+
+
+        /* =====================================
+           GENERATE WEDDING QR CODE
+        ===================================== */
+
+        generateQRBtn.addEventListener("click", function() {
+
+            if (typeof QRCode === "undefined") {
+
+                qrMessage.textContent =
+                    "QR code library failed to load. Check your internet connection and refresh the page.";
+
+                return;
+            }
+
+            // Get the current wedding page URL
+            const weddingURL = window.location.href.split("#")[0];
+
+            // Clear any previous QR code
+            qrContainer.innerHTML = "";
+            qrMessage.textContent = "";
+
+            // Display the QR code area
+            qrResult.hidden = false;
+
+            // Generate the QR code
+            new QRCode(qrContainer, {
+                text: weddingURL,
+                width: 220,
+                height: 220,
+                colorDark: "#795548",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+        });
+
+
+        /* =====================================
+           DOWNLOAD WEDDING QR CODE
+        ===================================== */
+
+        downloadQRBtn.addEventListener("click", function() {
+
+            const canvas = qrContainer.querySelector("canvas");
+            const image = qrContainer.querySelector("img");
+
+            let imageURL = "";
+
+            if (canvas) {
+                imageURL = canvas.toDataURL("image/png");
+            } else if (image) {
+                imageURL = image.src;
+            }
+
+            if (!imageURL) {
+
+                qrMessage.textContent =
+                    "Please generate your wedding QR code first.";
+
+                return;
+            }
+
+            const link = document.createElement("a");
+
+            link.href = imageURL;
+            link.download = "Wedding_Memories_QR.png";
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+        });
+
+
+        /* =====================================
+           INITIALIZE GALLERY
+        ===================================== */
+
+        displayPhotos();
+
+    </script>
+
+</body>
+</html>
+```

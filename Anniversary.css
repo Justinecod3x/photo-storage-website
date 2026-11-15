@@ -1,0 +1,761 @@
+/* =========================================
+   ANNIVERSARY PHOTO ALBUM
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.7), transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(255,220,225,.5), transparent 25%),
+        #eaded2;
+
+    color: #4a252c;
+    min-height: 100vh;
+}
+
+
+/* =========================================
+   ALBUM COVER / HEADER
+========================================= */
+
+.anniversary-header {
+    background:
+        linear-gradient(
+            135deg,
+            #5c1028,
+            #7b1e3a,
+            #9e304f
+        );
+
+    color: white;
+
+    padding: 45px 20px;
+
+    border-bottom: 8px solid #c9a227;
+
+    box-shadow:
+        0 8px 25px rgba(60, 15, 30, .35);
+}
+
+
+.header-content {
+    max-width: 1050px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 25px;
+
+    text-align: center;
+}
+
+
+.header-icon {
+    width: 95px;
+    height: 95px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 55px;
+
+    background: #fff8f0;
+
+    border: 5px solid #c9a227;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.25);
+}
+
+
+.anniversary-header h1 {
+    font-family: Georgia, serif;
+
+    font-size: 42px;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 8px;
+}
+
+
+.anniversary-header p {
+    color: #f9dfe5;
+
+    font-size: 17px;
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+.container {
+    max-width: 1150px;
+
+    margin: auto;
+
+    padding: 35px 20px 70px;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.back-btn {
+    display: inline-block;
+
+    text-decoration: none;
+
+    background: #7b1e3a;
+
+    color: white;
+
+    padding: 11px 20px;
+
+    border-radius: 20px;
+
+    margin-bottom: 30px;
+
+    transition: .3s;
+
+    box-shadow:
+        0 4px 10px rgba(80,20,40,.2);
+}
+
+
+.back-btn:hover {
+    background: #c9a227;
+
+    color: #4a252c;
+
+    transform: translateX(-4px);
+}
+
+
+/* =========================================
+   ALBUM TITLE PAGE
+========================================= */
+
+.page-title {
+    position: relative;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffdf8,
+            #f8eee3
+        );
+
+    padding: 50px 25px;
+
+    margin-bottom: 35px;
+
+    border-radius: 8px;
+
+    border: 1px solid #d5c2a8;
+
+    box-shadow:
+        0 12px 25px rgba(70,40,30,.18);
+
+    overflow: hidden;
+}
+
+
+/* Decorative album corners */
+
+.page-title::before,
+.page-title::after {
+    content: "♥";
+
+    position: absolute;
+
+    font-size: 45px;
+
+    color: #c9a227;
+
+    opacity: .65;
+}
+
+
+.page-title::before {
+    top: 15px;
+    left: 25px;
+}
+
+
+.page-title::after {
+    bottom: 15px;
+    right: 25px;
+}
+
+
+.page-title span {
+    font-size: 55px;
+
+    display: block;
+
+    margin-bottom: 10px;
+}
+
+
+.page-title h2 {
+    font-family: Georgia, serif;
+
+    color: #6d1833;
+
+    font-size: 34px;
+
+    margin-bottom: 12px;
+}
+
+
+.page-title p {
+    color: #806c6c;
+
+    font-style: italic;
+
+    font-size: 16px;
+}
+
+
+/* =========================================
+   UPLOAD SECTION
+========================================= */
+
+.upload-box {
+    position: relative;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffdf9,
+            #f7eee5
+        );
+
+    padding: 35px 25px;
+
+    text-align: center;
+
+    border: 2px solid #d8c3a5;
+
+    border-radius: 8px;
+
+    margin-bottom: 45px;
+
+    box-shadow:
+        0 8px 18px rgba(70,40,30,.13);
+}
+
+
+.upload-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 7px;
+
+    background: #c9a227;
+}
+
+
+.upload-icon {
+    font-size: 48px;
+
+    margin-bottom: 10px;
+}
+
+
+.upload-box h2 {
+    font-family: Georgia, serif;
+
+    color: #6d1833;
+
+    margin-bottom: 10px;
+}
+
+
+.upload-box p {
+    max-width: 650px;
+
+    margin: 0 auto 22px;
+
+    color: #766565;
+
+    line-height: 1.6;
+}
+
+
+#photoInput {
+    display: none;
+}
+
+
+/* =========================================
+   ALBUM BUTTON
+========================================= */
+
+.upload-btn {
+    display: inline-block;
+
+    padding: 13px 28px;
+
+    background: #7b1e3a;
+
+    color: white;
+
+    border-radius: 25px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    border: 2px solid #7b1e3a;
+
+    transition: .3s;
+
+    box-shadow:
+        0 5px 12px rgba(80,20,40,.2);
+}
+
+
+.upload-btn:hover {
+    background: #c9a227;
+
+    border-color: #c9a227;
+
+    color: #4a252c;
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================================
+   ALBUM SECTION HEADER
+========================================= */
+
+.gallery-header {
+    position: relative;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    padding: 18px 25px;
+
+    background: #fffaf2;
+
+    border-top: 3px solid #c9a227;
+
+    border-bottom: 3px solid #c9a227;
+
+    box-shadow:
+        0 5px 12px rgba(70,40,30,.12);
+}
+
+
+.gallery-header h2 {
+    font-family: Georgia, serif;
+
+    color: #6d1833;
+
+    font-size: 28px;
+
+    margin-bottom: 5px;
+}
+
+
+.gallery-header p {
+    color: #806c6c;
+
+    font-style: italic;
+}
+
+
+.photo-count {
+    background: #7b1e3a;
+
+    color: white;
+
+    padding: 9px 18px;
+
+    border-radius: 20px;
+
+    border: 2px solid #c9a227;
+
+    font-weight: bold;
+}
+
+
+/* =========================================
+   PHOTO ALBUM
+========================================= */
+
+.gallery {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 35px;
+
+    padding: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8dccd,
+            #f3e9dc
+        );
+
+    border: 10px solid #6d1833;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 15px 30px rgba(50,20,20,.25);
+
+    position: relative;
+}
+
+
+/* =========================================
+   PHOTO CARD
+========================================= */
+
+.photo-card {
+    position: relative;
+
+    background: #fffdf8;
+
+    padding: 12px 12px 35px;
+
+    border-radius: 3px;
+
+    border: 1px solid #ddd0bd;
+
+    box-shadow:
+        0 8px 15px rgba(50,30,20,.2);
+
+    transition: .35s;
+
+    transform: rotate(-1deg);
+}
+
+
+/* Alternate photo rotation */
+
+.photo-card:nth-child(even) {
+    transform: rotate(1.5deg);
+}
+
+
+.photo-card:nth-child(3n) {
+    transform: rotate(-2deg);
+}
+
+
+.photo-card:hover {
+    transform:
+        translateY(-10px)
+        rotate(0deg)
+        scale(1.03);
+
+    z-index: 5;
+
+    box-shadow:
+        0 18px 30px rgba(50,30,20,.3);
+}
+
+
+/* =========================================
+   PHOTO
+========================================= */
+
+.image-container {
+    width: 100%;
+
+    height: 250px;
+
+    overflow: hidden;
+
+    background: #eee;
+
+    border: 1px solid #d4c6b5;
+}
+
+
+.image-container img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transition: .5s;
+}
+
+
+.photo-card:hover img {
+    transform: scale(1.06);
+}
+
+
+/* =========================================
+   PHOTO CAPTION AREA
+========================================= */
+
+.photo-card::after {
+    content: "♥ Our Special Memory ♥";
+
+    position: absolute;
+
+    bottom: 9px;
+
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+
+    font-family: Georgia, serif;
+
+    font-size: 13px;
+
+    color: #7b1e3a;
+}
+
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.delete-btn {
+    position: absolute;
+
+    top: 20px;
+
+    right: 20px;
+
+    width: auto;
+
+    padding: 7px 12px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    background: rgba(123,30,58,.9);
+
+    color: white;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    transition: .3s;
+
+    z-index: 3;
+}
+
+
+.photo-card:hover .delete-btn {
+    opacity: 1;
+}
+
+
+.delete-btn:hover {
+    background: #c62848;
+}
+
+
+/* =========================================
+   EMPTY ALBUM
+========================================= */
+
+.no-photo {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    background: #fffdf8;
+
+    padding: 70px 20px;
+
+    border: 2px dashed #c9a227;
+
+    border-radius: 5px;
+}
+
+
+.empty-icon {
+    font-size: 65px;
+
+    margin-bottom: 15px;
+}
+
+
+.no-photo h3 {
+    font-family: Georgia, serif;
+
+    color: #6d1833;
+
+    font-size: 25px;
+
+    margin-bottom: 10px;
+}
+
+
+.no-photo p {
+    color: #806c6c;
+
+    font-style: italic;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+    .gallery {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 650px) {
+
+    .anniversary-header {
+        padding: 30px 15px;
+    }
+
+
+    .header-content {
+        flex-direction: column;
+    }
+
+
+    .anniversary-header h1 {
+        font-size: 30px;
+    }
+
+
+    .anniversary-header p {
+        font-size: 14px;
+    }
+
+
+    .header-icon {
+        width: 75px;
+        height: 75px;
+
+        font-size: 43px;
+    }
+
+
+    .container {
+        padding: 25px 12px 50px;
+    }
+
+
+    .page-title {
+        padding: 40px 15px;
+    }
+
+
+    .page-title h2 {
+        font-size: 27px;
+    }
+
+
+    .gallery-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+
+    .gallery {
+        grid-template-columns: 1fr;
+
+        padding: 18px;
+
+        border-width: 7px;
+
+        gap: 25px;
+    }
+
+
+    .image-container {
+        height: 270px;
+    }
+
+
+    .delete-btn {
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================
+   SMALL PHONE
+========================================= */
+
+@media (max-width: 420px) {
+
+    .gallery {
+        padding: 12px;
+    }
+
+
+    .image-container {
+        height: 240px;
+    }
+
+
+    .upload-btn {
+        width: 100%;
+    }
+
+}

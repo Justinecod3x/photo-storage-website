@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Storage | Admin Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">📸 <span>Photo Storage</span></div>
+
+        <p class="menu-title">MAIN MENU</p>
+
+        <a class="nav-link active" onclick="showDashboard()">🏠 <span>Dashboard</span></a>
+        <a class="nav-link" onclick="goToOccasions()">🖼️ <span>My Occasions</span></a>
+        <a class="nav-link" onclick="showRecent()">📂 <span>Recent Activity</span></a>
+
+        <p class="menu-title">ACCOUNT</p>
+
+        <a class="nav-link" onclick="showSettings()">⚙️ <span>Settings</span></a>
+        <a class="nav-link logout" onclick="logout()">🚪 <span>Logout</span></a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <div class="topbar">
+            <div>
+                <h2>Admin Dashboard</h2>
+                <p>Welcome back! Manage your photo memories.</p>
+            </div>
+
+            <div class="admin-profile">
+                👤 Administrator
+            </div>
+        </div>
+
+
+        <!-- WELCOME -->
+        <section class="welcome">
+            <h2>Welcome to Photo Storage! 📸</h2>
+            <p>Keep all your special memories organized in one place.</p>
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-icon">🖼️</div>
+                <h3 id="totalPhotos">0</h3>
+                <p>Total Photos</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📁</div>
+                <h3 id="totalOccasions">7</h3>
+                <p>Total Occasions</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">💒</div>
+                <h3 id="totalAlbums">7</h3>
+                <p>Total Albums</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <h3 id="recentUploads">0</h3>
+                <p>Recent Activities</p>
+            </div>
+
+        </section>
+
+
+        <!-- OCCASIONS -->
+        <section id="occasions">
+
+            <div class="section-header">
+                <div>
+                    <h2>My Occasions</h2>
+                    <p class="section-description">
+                        Select an occasion to open its gallery.
+                    </p>
+                </div>
+
+                <button class="add-btn" onclick="addOccasion()">
+                    + Add Occasion
+                </button>
+            </div>
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-box"
+                placeholder="🔍 Search occasions..."
+                oninput="searchOccasions()"
+            >
+
+            <div class="occasion-container" id="occasionContainer"></div>
+
+        </section>
+
+
+        <!-- RECENT ACTIVITY -->
+        <section class="recent-section" id="recent">
+
+            <h2>Recent Activity</h2>
+
+            <div id="activityList">
+                <div class="activity">
+                    <span>📸 Photo Storage dashboard created</span>
+                    <small>Today</small>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        let occasions = [
+            {
+                name: "Wedding",
+                icon: "💒",
+                description: "Wedding Photos",
+                link: "wedding.html"
+            },
+            {
+                name: "Birthday",
+                icon: "🎂",
+                description: "Birthday Photos",
+                link: "Birth_day.html"
+            },
+            {
+                name: "Graduation",
+                icon: "🎓",
+                description: "Graduation Photos",
+                link: "graduation.html"
+            },
+            {
+                name: "Anniversary",
+                icon: "💏",
+                description: "Anniversary Photos",
+                link: "Anniversary..html"
+            },
+            {
+                name: "Family",
+                icon: "👨‍👩‍👧‍👦",
+                description: "Family Photos",
+                link: "Family.html"
+            },
+            {
+                name: "Christmas",
+                icon: "🎄",
+                description: "Christmas Photos",
+                link: ""
+            },
+            {
+                name: "Other",
+                icon: "📷",
+                description: "Other Memories",
+                link: ""
+            }
+        ];
+
+
+        // DISPLAY OCCASIONS
+        function displayOccasions(data = occasions) {
+
+            const container = document.getElementById("occasionContainer");
+
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                container.innerHTML =
+                    '<div class="empty-message">No occasions found.</div>';
+                return;
+            }
+
+            data.forEach(occasion => {
+
+                const card = document.createElement("div");
+                card.className = "occasion-card";
+
+                const icon = document.createElement("div");
+                icon.className = "occasion-icon";
+                icon.textContent = occasion.icon;
+
+                const title = document.createElement("h3");
+                title.textContent = occasion.name;
+
+                const description = document.createElement("p");
+                description.textContent = occasion.description;
+
+                card.append(icon, title, description);
+
+                card.onclick = () => openGallery(occasion);
+
+                container.appendChild(card);
+
+            });
+
+            updateStatistics();
+        }
+
+
+        // OPEN GALLERY
+        function openGallery(occasion) {
+
+            if (occasion.link) {
+                window.location.href = occasion.link;
+            } else {
+                alert("The " + occasion.name +
+                    " gallery page has not been created yet.");
+            }
+
+        }
+
+
+        // ADD NEW OCCASION
+        function addOccasion() {
+
+            let name = prompt("Enter the name of the new occasion:");
+
+            if (!name || name.trim() === "") {
+                return;
+            }
+
+            name = name.trim();
+
+            const exists = occasions.some(
+                item => item.name.toLowerCase() === name.toLowerCase()
+            );
+
+            if (exists) {
+                alert("This occasion already exists!");
+                return;
+            }
+
+            occasions.push({
+                name: name,
+                icon: "📷",
+                description: name + " Photos",
+                link: ""
+            });
+
+            displayOccasions();
+
+            addActivity("New occasion created: " + name);
+
+            alert(name + " occasion added successfully!");
+
+        }
+
+
+        // SEARCH OCCASIONS
+        function searchOccasions() {
+
+            const search = document
+                .getElementById("searchInput")
+                .value.toLowerCase();
+
+            const filtered = occasions.filter(item =>
+                item.name.toLowerCase().includes(search)
+            );
+
+            displayOccasions(filtered);
+
+        }
+
+
+        // UPDATE STATISTICS
+        function updateStatistics() {
+
+            document.getElementById("totalOccasions").textContent =
+                occasions.length;
+
+            document.getElementById("totalAlbums").textContent =
+                occasions.length;
+
+        }
+
+
+        // RECENT ACTIVITY
+        function addActivity(message) {
+
+            const list = document.getElementById("activityList");
+
+            const activity = document.createElement("div");
+            activity.className = "activity";
+
+            const text = document.createElement("span");
+            text.textContent = "📸 " + message;
+
+            const date = document.createElement("small");
+            date.textContent = new Date().toLocaleString();
+
+            activity.append(text, date);
+
+            list.prepend(activity);
+
+            document.getElementById("recentUploads").textContent =
+                list.children.length;
+
+        }
+
+
+        // SIDEBAR NAVIGATION
+        function showDashboard() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function goToOccasions() {
+            document.getElementById("occasions").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+
+        function showRecent() {
+            document.getElementById("recent").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+
+        function showSettings() {
+            alert("Settings page is coming soon!");
+        }
+
+        function logout() {
+
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "index.html";
+            }
+
+        }
+
+
+        // INITIALIZE DASHBOARD
+        displayOccasions();
+
+    </script>
+
+</body>
+</html>
