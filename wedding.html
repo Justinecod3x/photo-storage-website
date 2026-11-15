@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -98,7 +97,7 @@
 
             <p>
                 Share your wedding memories with family and friends.
-                Generate a QR code to open this wedding page.
+                Generate a QR code so guests can view your wedding photos.
             </p>
 
             <button
@@ -133,7 +132,21 @@
 
     </main>
 
-    <script>
+    <!-- IMPORTANT: type="module" is required for the Supabase import -->
+    <script type="module">
+
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+        /* =====================================
+           SUPABASE SETUP
+        ===================================== */
+
+        const SUPABASE_URL = "https://zjgyunbxqonjxlnqwiqv.supabase.co";
+        const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+        const BUCKET = "wedding-photos";
+
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 
         /* =====================================
            GET HTML ELEMENTS
@@ -151,23 +164,40 @@
 
 
         /* =====================================
-           LOAD SAVED WEDDING PHOTOS
+           LOAD WEDDING PHOTOS FROM SUPABASE
         ===================================== */
 
-        let photos = [];
+        let photos = []; // each item: { name, url }
 
-        try {
-            photos = JSON.parse(
-                localStorage.getItem("weddingPhotos")
-            ) || [];
+        async function loadPhotos() {
 
-            if (!Array.isArray(photos)) {
-                photos = [];
+            const { data, error } = await supabase.storage
+                .from(BUCKET)
+                .list("", {
+                    limit: 500,
+                    sortBy: { column: "created_at", order: "desc" }
+                });
+
+            if (error) {
+                console.error("Unable to load wedding photos:", error);
+                alert("Unable to load photos: " + error.message);
+                return;
             }
 
-        } catch (error) {
-            photos = [];
-            console.error("Unable to load wedding photos:", error);
+            photos = data
+                .filter(function(file) {
+                    return file.name !== ".emptyFolderPlaceholder";
+                })
+                .map(function(file) {
+                    return {
+                        name: file.name,
+                        url: supabase.storage
+                            .from(BUCKET)
+                            .getPublicUrl(file.name).data.publicUrl
+                    };
+                });
+
+            displayPhotos();
         }
 
 
@@ -208,7 +238,7 @@
                 imageContainer.className = "image-container";
 
                 const img = document.createElement("img");
-                img.src = photo;
+                img.src = photo.url;
                 img.alt = "Wedding Photo " + (index + 1);
 
                 imageContainer.appendChild(img);
@@ -216,9 +246,9 @@
                 // SAVE PHOTO BUTTON
                 const downloadLink = document.createElement("a");
                 downloadLink.className = "download-btn";
-                downloadLink.href = photo;
-                downloadLink.download =
-                    "wedding-photo-" + (index + 1) + ".png";
+                downloadLink.href = photo.url;
+                downloadLink.target = "_blank";
+                downloadLink.rel = "noopener";
                 downloadLink.textContent = "⬇ Save Photo";
 
                 // DELETE PHOTO BUTTON
@@ -228,7 +258,7 @@
                 deleteButton.textContent = "🗑 Delete";
 
                 deleteButton.addEventListener("click", function() {
-                    deletePhoto(index);
+                    deletePhoto(photo.name);
                 });
 
                 photoCard.appendChild(imageContainer);
@@ -246,52 +276,41 @@
            UPLOAD WEDDING PHOTOS
         ===================================== */
 
-        photoInput.addEventListener("change", function(event) {
+        photoInput.addEventListener("change", async function(event) {
 
-            const files = Array.from(event.target.files);
-
-            files.forEach(function(file) {
-
-                if (!file.type.startsWith("image/")) {
-                    return;
-                }
-
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-
-                    const updatedPhotos = [...photos, e.target.result];
-
-                    try {
-
-                        localStorage.setItem(
-                            "weddingPhotos",
-                            JSON.stringify(updatedPhotos)
-                        );
-
-                        photos = updatedPhotos;
-                        displayPhotos();
-
-                    } catch (error) {
-
-                        alert(
-                            "Unable to save this photo. Browser storage may be full. Try using smaller photos."
-                        );
-
-                        console.error("Wedding photo storage error:", error);
-                    }
-
-                };
-
-                reader.onerror = function() {
-                    alert("Unable to read this image. Please try again.");
-                };
-
-                reader.readAsDataURL(file);
-
+            const files = Array.from(event.target.files).filter(function(file) {
+                return file.type.startsWith("image/");
             });
 
+            if (files.length === 0) {
+                return;
+            }
+
+            photoCount.textContent = "Uploading...";
+
+            await Promise.all(files.map(async function(file) {
+
+                const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+
+                const path =
+                    Date.now() + "-" +
+                    Math.random().toString(36).slice(2, 8) + "-" +
+                    safeName;
+
+                const { error } = await supabase.storage
+                    .from(BUCKET)
+                    .upload(path, file);
+
+                if (error) {
+                    console.error("Wedding photo upload error:", error);
+                    alert("Upload failed: " + error.message);
+                }
+
+            }));
+
             photoInput.value = "";
+
+            loadPhotos();
 
         });
 
@@ -300,7 +319,7 @@
            DELETE WEDDING PHOTO
         ===================================== */
 
-        function deletePhoto(index) {
+        async function deletePhoto(name) {
 
             const confirmDelete = confirm(
                 "Are you sure you want to delete this wedding photo?"
@@ -310,25 +329,17 @@
                 return;
             }
 
-            const updatedPhotos = [...photos];
-            updatedPhotos.splice(index, 1);
+            const { error } = await supabase.storage
+                .from(BUCKET)
+                .remove([name]);
 
-            try {
-
-                localStorage.setItem(
-                    "weddingPhotos",
-                    JSON.stringify(updatedPhotos)
-                );
-
-                photos = updatedPhotos;
-                displayPhotos();
-
-            } catch (error) {
-
-                alert("Unable to update your wedding gallery.");
+            if (error) {
                 console.error(error);
-
+                alert("Unable to delete: " + error.message);
+                return;
             }
+
+            loadPhotos();
 
         }
 
@@ -347,9 +358,9 @@
                 return;
             }
 
-            // Get the current wedding page URL
-          const weddingURL =
-"https://photo-storage-website.vercel.app/wedding_guest.html";
+            // Guests are sent to the guest (view only) gallery
+            const weddingURL =
+                "https://photo-storage-website.vercel.app/wedding_guest.html";
 
             // Clear any previous QR code
             qrContainer.innerHTML = "";
@@ -412,7 +423,7 @@
            INITIALIZE GALLERY
         ===================================== */
 
-        displayPhotos();
+        loadPhotos();
 
     </script>
 
