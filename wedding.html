@@ -361,17 +361,9 @@
                 return;
             }
 
-            // Guests are sent to the guest (view only) gallery.
-            // On localhost, use the live site so phones can open the link.
-            const isLocal =
-                location.hostname === "localhost" ||
-                location.hostname === "127.0.0.1" ||
-                location.protocol === "file:";
-
-            const weddingURL = isLocal
-                ? LIVE_SITE + "/wedding_guest.html"
-                : new URL("wedding_guest.html", location.href).href;
-
+             // Always use the main domain so guests never get a protected link
+            const weddingURL =
+                "https://photo-storage-website-zh19.vercel.app/wedding_guest.html";
             // Clear any previous QR code
             qrContainer.innerHTML = "";
             qrMessage.textContent = "";
