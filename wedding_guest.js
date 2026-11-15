@@ -47,9 +47,22 @@ async function loadGallery() {
 
     photos.forEach(function (file, index) {
 
-        const url = supabase.storage
+        // Normal link, used to show the picture
+        const viewUrl = supabase.storage
             .from(BUCKET)
             .getPublicUrl(file.name).data.publicUrl;
+
+        // File name for the saved picture, e.g. wedding-photo-1.jpg
+        const extension = file.name.includes(".")
+            ? file.name.split(".").pop()
+            : "jpg";
+
+        const downloadName = "wedding-photo-" + (index + 1) + "." + extension;
+
+        // Special link that tells the browser to download instead of open
+        const downloadUrl = supabase.storage
+            .from(BUCKET)
+            .getPublicUrl(file.name, { download: downloadName }).data.publicUrl;
 
         const card = document.createElement("div");
         card.className = "photo-card";
@@ -58,16 +71,16 @@ async function loadGallery() {
         imageContainer.className = "image-container";
 
         const img = document.createElement("img");
-        img.src = url;
+        img.src = viewUrl;
         img.alt = "Wedding Photo " + (index + 1);
+        img.loading = "lazy";
         imageContainer.appendChild(img);
 
         const saveLink = document.createElement("a");
         saveLink.className = "download-btn";
-        saveLink.href = url;
-        saveLink.target = "_blank";
-        saveLink.rel = "noopener";
-        saveLink.textContent = "⬇ Save Photo";
+        saveLink.href = downloadUrl;
+        saveLink.setAttribute("download", downloadName);
+        saveLink.textContent = "⬇ Download Photo";
 
         card.appendChild(imageContainer);
         card.appendChild(saveLink);
