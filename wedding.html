@@ -12,7 +12,6 @@
 
     <!-- QR Code Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script type="module" src="test-supabase.js"></script>
 </head>
 
 <body>
@@ -349,7 +348,8 @@
             }
 
             // Get the current wedding page URL
-            const weddingURL = window.location.href.split("#")[0];
+          const weddingURL =
+"https://photo-storage-website.vercel.app/wedding_guest.html";
 
             // Clear any previous QR code
             qrContainer.innerHTML = "";
@@ -418,4 +418,3 @@
 
 </body>
 </html>
-```
