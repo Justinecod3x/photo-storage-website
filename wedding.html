@@ -82,7 +82,7 @@
             <div class="photo-count" id="photoCount">
                 0 Photos
             </div>
-                
+
         </div>
 
         <!-- PHOTO GALLERY -->
@@ -144,6 +144,9 @@
         const SUPABASE_URL = "https://zjgyunbxqonjxlnqwiqv.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZ3l1bmJ4cW9uanhsbnF3aXF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ3NDEwOTMsImV4cCI6MjExMDMxNzA5M30.C-tr8rM1w-kSvWsEtLFL_GvxD7hFbCopsuFy1Aw5AqE";
         const BUCKET = "wedding-photos";
+
+        // Your live site (used when the page is opened from localhost)
+        const LIVE_SITE = "https://photo-storage-website-zh19.vercel.app";
 
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -358,9 +361,17 @@
                 return;
             }
 
-            // Guests are sent to the guest (view only) gallery
-          const weddingURL =
-    "https://photo-storage-website-zh19.vercel.app/wedding_guest.html";
+            // Guests are sent to the guest (view only) gallery.
+            // On localhost, use the live site so phones can open the link.
+            const isLocal =
+                location.hostname === "localhost" ||
+                location.hostname === "127.0.0.1" ||
+                location.protocol === "file:";
+
+            const weddingURL = isLocal
+                ? LIVE_SITE + "/wedding_guest.html"
+                : new URL("wedding_guest.html", location.href).href;
+
             // Clear any previous QR code
             qrContainer.innerHTML = "";
             qrMessage.textContent = "";
@@ -377,6 +388,9 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
+
+            // Show the link so you can check it
+            qrMessage.textContent = "QR link: " + weddingURL;
 
         });
 
