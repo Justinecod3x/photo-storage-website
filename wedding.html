@@ -379,14 +379,18 @@
             // Display the QR code area
             qrResult.hidden = false;
 
-            // Generate the QR code
+            // White border around the QR so phones can detect it
+            qrContainer.style.cssText =
+                "background:#ffffff;padding:16px;display:inline-block;border-radius:12px;";
+
+            // Generate the QR code (black on white, medium error correction)
             new QRCode(qrContainer, {
                 text: weddingURL,
-                width: 220,
-                height: 220,
-                colorDark: "#795548",
+                width: 280,
+                height: 280,
+                colorDark: "#000000",
                 colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+                correctLevel: QRCode.CorrectLevel.M
             });
 
             // Show the link so you can check it
@@ -402,17 +406,8 @@
         downloadQRBtn.addEventListener("click", function() {
 
             const canvas = qrContainer.querySelector("canvas");
-            const image = qrContainer.querySelector("img");
 
-            let imageURL = "";
-
-            if (canvas) {
-                imageURL = canvas.toDataURL("image/png");
-            } else if (image) {
-                imageURL = image.src;
-            }
-
-            if (!imageURL) {
+            if (!canvas) {
 
                 qrMessage.textContent =
                     "Please generate your wedding QR code first.";
@@ -420,9 +415,20 @@
                 return;
             }
 
+            // Add a white border to the downloaded image too
+            const border = 40;
+            const out = document.createElement("canvas");
+            out.width = canvas.width + border * 2;
+            out.height = canvas.height + border * 2;
+
+            const ctx = out.getContext("2d");
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, out.width, out.height);
+            ctx.drawImage(canvas, border, border);
+
             const link = document.createElement("a");
 
-            link.href = imageURL;
+            link.href = out.toDataURL("image/png");
             link.download = "Wedding_Memories_QR.png";
 
             document.body.appendChild(link);
