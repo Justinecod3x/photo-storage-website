@@ -825,3 +825,483 @@ button:focus-visible,
         scroll-behavior: auto !important;
     }
 }
+
+/* =========================================
+   GUEST GALLERY REDESIGN
+   (wedding_guest.html only - everything is
+   scoped to .guest-page so the admin page
+   is not affected)
+========================================= */
+
+.guest-page {
+    --font-script: "Great Vibes", "Brush Script MT", cursive;
+    --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+
+    background:
+        radial-gradient(circle at 10% 6%, rgba(232, 180, 184, 0.20), transparent 36%),
+        radial-gradient(circle at 92% 34%, rgba(197, 164, 109, 0.14), transparent 38%),
+        radial-gradient(circle at 12% 88%, rgba(232, 180, 184, 0.16), transparent 40%),
+        var(--cream);
+}
+
+.guest-page h2,
+.guest-page .no-photo h3 {
+    font-family: var(--font-serif);
+}
+
+/* ---------- HERO ---------- */
+
+.guest-hero {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 64px 20px 84px;
+    background: linear-gradient(160deg, #fff6f3 0%, #f8e3e5 48%, #efd8c4 100%);
+    border-bottom: 1px solid #ecd8d3;
+    border-radius: 0 0 50% 50% / 0 0 30px 30px;
+}
+
+.guest-hero::before {
+    content: "♡";
+    position: absolute;
+    left: -34px;
+    top: -46px;
+    font-size: 230px;
+    line-height: 1;
+    color: rgba(183, 110, 121, 0.09);
+    transform: rotate(-14deg);
+    pointer-events: none;
+}
+
+.guest-hero::after {
+    content: "♡";
+    position: absolute;
+    right: -26px;
+    bottom: -80px;
+    font-size: 270px;
+    line-height: 1;
+    color: rgba(197, 164, 109, 0.15);
+    transform: rotate(12deg);
+    pointer-events: none;
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.hero-badge {
+    width: 92px;
+    height: 92px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    font-size: 42px;
+    box-shadow:
+        0 0 0 6px rgba(255, 255, 255, 0.55),
+        0 0 0 7px rgba(197, 164, 109, 0.6),
+        0 14px 30px rgba(104, 64, 65, 0.14);
+    animation: guestFloat 5s ease-in-out infinite;
+}
+
+.hero-eyebrow {
+    margin-bottom: 4px;
+    color: var(--dark-gold);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.guest-hero h1 {
+    font-family: var(--font-script);
+    font-size: clamp(50px, 10vw, 84px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--dark-rose);
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.75);
+}
+
+.hero-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 10px 0 14px;
+}
+
+.hero-divider span {
+    width: 74px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+}
+
+.hero-divider span:last-child {
+    background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.hero-divider i {
+    font-style: normal;
+    font-size: 18px;
+    color: var(--rose);
+}
+
+.hero-sub {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-style: italic;
+    color: #806967;
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+
+.guest-page .guest-container {
+    position: relative;
+    z-index: 2;
+    margin-top: -40px;
+    padding-top: 0;
+}
+
+/* ---------- WELCOME CARD ---------- */
+
+.guest-welcome {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 48px;
+    padding: 22px 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #f1e4df;
+    border-radius: 22px;
+    box-shadow: 0 14px 34px rgba(104, 64, 65, 0.12);
+}
+
+.welcome-icon {
+    width: 62px;
+    height: 62px;
+    min-width: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--light-pink);
+    border: 1px solid var(--border);
+    font-size: 29px;
+}
+
+.guest-welcome h2 {
+    color: var(--dark-rose);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.guest-welcome p {
+    margin-top: 4px;
+    color: var(--gray);
+    font-size: 14px;
+}
+
+/* ---------- GALLERY HEADER ---------- */
+
+.guest-page .gallery-header {
+    position: relative;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: none;
+}
+
+.guest-page .gallery-header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), rgba(197, 164, 109, 0));
+}
+
+.guest-page .gallery-header h2 {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.guest-page .photo-count {
+    padding: 9px 20px;
+    background: #ffffff;
+    border: 1px solid #e3cfa6;
+    color: var(--dark-gold);
+    letter-spacing: 0.4px;
+    box-shadow: 0 4px 12px rgba(197, 164, 109, 0.18);
+}
+
+/* ---------- PHOTO GRID ---------- */
+
+.guest-page .gallery {
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* ---------- PHOTO CARD (polaroid style) ---------- */
+
+.guest-page .photo-card {
+    padding: 12px 12px 14px;
+    background: #ffffff;
+    border: 1px solid #f1e4df;
+    border-radius: 10px;
+    box-shadow: 0 10px 28px rgba(104, 64, 65, 0.10);
+    animation: guestRise 0.6s ease both;
+    transition: transform 0.3s ease, rotate 0.3s ease, box-shadow 0.3s ease;
+}
+
+.guest-page .photo-card:nth-child(3n + 1) { rotate: -1.2deg; }
+.guest-page .photo-card:nth-child(3n + 2) { rotate: 0.8deg; }
+.guest-page .photo-card:nth-child(3n)     { rotate: -0.4deg; }
+
+.guest-page .photo-card:nth-child(2) { animation-delay: 0.06s; }
+.guest-page .photo-card:nth-child(3) { animation-delay: 0.12s; }
+.guest-page .photo-card:nth-child(4) { animation-delay: 0.18s; }
+.guest-page .photo-card:nth-child(5) { animation-delay: 0.24s; }
+.guest-page .photo-card:nth-child(6) { animation-delay: 0.30s; }
+.guest-page .photo-card:nth-child(n + 7) { animation-delay: 0.36s; }
+
+.guest-page .photo-card:hover {
+    rotate: 0deg;
+    transform: translateY(-7px);
+    box-shadow: 0 20px 38px rgba(104, 64, 65, 0.18);
+}
+
+.guest-page .image-container {
+    position: relative;
+    height: auto;
+    aspect-ratio: 1 / 1.1;
+    margin-bottom: 14px;
+    border-radius: 6px;
+    background: #f7eeeb;
+}
+
+.guest-page .image-container img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ---------- DOWNLOAD BUTTON ---------- */
+
+.guest-page .download-btn {
+    margin-bottom: 0;
+    padding: 12px 14px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--rose), var(--dark-rose));
+    color: #ffffff;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 14px rgba(150, 81, 94, 0.25);
+}
+
+.guest-page .download-btn:hover {
+    background: linear-gradient(135deg, var(--dark-rose), #7f414d);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(150, 81, 94, 0.32);
+}
+
+/* ---------- EMPTY AND ERROR MESSAGES ---------- */
+
+.guest-page .no-photo {
+    padding: 66px 20px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px dashed #dcc6a0;
+    border-radius: 26px;
+    box-shadow: 0 10px 30px rgba(104, 64, 65, 0.07);
+}
+
+.guest-page .no-photo h3 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.guest-page .gallery > p {
+    grid-column: 1 / -1;
+    padding: 40px 18px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #f1d8d7;
+    border-radius: 18px;
+    color: #a04450;
+    font-weight: 600;
+}
+
+/* ---------- LOADING PLACEHOLDERS ---------- */
+
+.skeleton-card {
+    padding: 12px 12px 14px;
+    background: #ffffff;
+    border: 1px solid #f1e4df;
+    border-radius: 10px;
+    box-shadow: 0 10px 28px rgba(104, 64, 65, 0.07);
+}
+
+.skeleton-img,
+.skeleton-btn {
+    background: linear-gradient(90deg, #f6ebe8 25%, #fcf6f3 50%, #f6ebe8 75%);
+    background-size: 200% 100%;
+    animation: guestShimmer 1.4s linear infinite;
+}
+
+.skeleton-img {
+    aspect-ratio: 1 / 1.1;
+    margin-bottom: 14px;
+    border-radius: 6px;
+}
+
+.skeleton-btn {
+    height: 40px;
+    border-radius: 999px;
+}
+
+/* ---------- FOOTER ---------- */
+
+.guest-footer {
+    padding: 48px 20px 64px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    background: linear-gradient(180deg, transparent, rgba(247, 225, 227, 0.6));
+}
+
+.guest-footer p {
+    font-family: var(--font-script);
+    font-size: 38px;
+    line-height: 1.3;
+    color: var(--dark-rose);
+}
+
+.guest-footer span {
+    display: block;
+    margin-top: 6px;
+    color: var(--gray);
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+
+/* ---------- GUEST ANIMATIONS ---------- */
+
+@keyframes guestRise {
+    from {
+        opacity: 0;
+        translate: 0 18px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes guestFloat {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -6px; }
+}
+
+@keyframes guestShimmer {
+    to { background-position: -200% 0; }
+}
+
+/* ---------- GUEST TABLET ---------- */
+
+@media (max-width: 900px) {
+    .guest-page .gallery {
+        gap: 22px;
+    }
+}
+
+/* ---------- GUEST MOBILE ---------- */
+
+@media (max-width: 600px) {
+    .guest-hero {
+        padding: 46px 16px 66px;
+        border-radius: 0 0 50% 50% / 0 0 20px 20px;
+    }
+
+    .hero-badge {
+        width: 76px;
+        height: 76px;
+        margin-bottom: 16px;
+        font-size: 35px;
+    }
+
+    .hero-eyebrow {
+        font-size: 11px;
+        letter-spacing: 3px;
+    }
+
+    .hero-divider span {
+        width: 48px;
+    }
+
+    .hero-sub {
+        font-size: 18px;
+    }
+
+    .guest-page .guest-container {
+        margin-top: -34px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .guest-welcome {
+        gap: 14px;
+        margin-bottom: 36px;
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .welcome-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        font-size: 24px;
+    }
+
+    .guest-welcome h2 {
+        font-size: 25px;
+    }
+
+    .guest-welcome p {
+        font-size: 13px;
+    }
+
+    .guest-page .gallery-header h2 {
+        font-size: 27px;
+    }
+
+    .guest-page .gallery {
+        gap: 14px;
+    }
+
+    .guest-page .photo-card,
+    .skeleton-card {
+        padding: 8px 8px 10px;
+        border-radius: 8px;
+    }
+
+    .guest-page .image-container,
+    .skeleton-img {
+        margin-bottom: 10px;
+    }
+
+    .guest-page .download-btn {
+        padding: 10px 6px;
+        font-size: 11.5px;
+    }
+
+    .guest-footer p {
+        font-size: 32px;
+    }
+}
